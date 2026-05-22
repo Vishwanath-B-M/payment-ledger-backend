@@ -13,7 +13,7 @@ async function userCheck(req,res,next) {
         const decoded=jwt.verify(token,process.env.jwturl)
     const user=await usermodel.findById(decoded.userid)
     req.user=user
-    next()
+   return next()
     }catch(err){
         console.log(err)
         return res.status(401).json({

@@ -35,5 +35,8 @@ ledgerschema.pre("updateOne",ledgermodification)
 ledgerschema.pre("deleteOne",ledgermodification)
 ledgerschema.pre('remove',ledgermodification)
 ledgerschema.pre('deletemany',ledgermodification)
+ledgerschema.pre("updatemany",ledgermodification)
+ledgerschema.pre('findOneandDelete',ledgermodification)
+ledgerschema.pre('findOneandReplace',ledgermodification)
 const ledgermodel=mongoose.model("ledger",ledgerschema)
 module.exports=ledgermodel;
