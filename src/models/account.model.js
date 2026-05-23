@@ -30,15 +30,15 @@ accountschema.methods.balance=async function () {
         {$group:{
             _id:null,
             totaldebit:{
-                $con:[
-                    {$eq:["type","debit"]},
+                $cond:[
+                    {$eq:["$type","debit"]},
                     "$amount",
                     0
                 ]
             },
             totalcredits:{
-                $con:[
-                    {$eq:["type","credit"]},
+                $cond:[
+                    {$eq:["$type","credit"]},
                     "$amount",
                     0
                 ]

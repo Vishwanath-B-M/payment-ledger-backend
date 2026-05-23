@@ -19,6 +19,12 @@ const userschema=new mongoose.Schema({
         required:[true,"please put the password it is security"],
         minLength:[8,"password must be 8 atleast 8 letters"],
         select:false
+    },
+    systemUser:{
+        type:Boolean,
+        default:false,
+        immutable:true,
+        select:false
     }
 },{
     timestamps:true

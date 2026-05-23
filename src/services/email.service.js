@@ -20,6 +20,21 @@ const sendMail = (email, subject, text, html) => {
         text,
         html
     };
+async function sendtranscationemail(useremail,name,account,amount){
+    useremail,
+    subject,
+    text,
+    html,
+   await sendMail(email,subject,text,html)
+}
+async function failedtranscation(useremail,name,account,amount) {
+    useremail,
+    subject,
+    text,
+    html,
+   await sendMail(email,subject,text,html)
+    
+}
 
     transporter.sendMail(mailOptions, function (err, data) {
         if (err) {
@@ -29,4 +44,4 @@ const sendMail = (email, subject, text, html) => {
     });
 }
 
-module.exports = sendMail;
+module.exports = {sendMail,failedtranscation,sendtranscationemail}
