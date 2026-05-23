@@ -26,17 +26,17 @@ const accountschema=new mongoose.Schema({
 accountschema.index({user:1,status:1})
 accountschema.methods.balance=async function () {
     const balancedata=await ledgermodel.aggregate([
-        {$match:{account:_id}},
+        {$match:{account:this._id}},
         {$group:{
             _id:null,
-            $totaldebit:{
+            totaldebit:{
                 $con:[
                     {$eq:["type","debit"]},
                     "$amount",
                     0
                 ]
             },
-            $totalcredits:{
+            totalcredits:{
                 $con:[
                     {$eq:["type","credit"]},
                     "$amount",
@@ -46,8 +46,8 @@ accountschema.methods.balance=async function () {
         }},
         {
          $project:{
-            id:0,
-            balance:{$subsract:["$totalcredits","$totaldebit"]}
+             _id:0,
+            balance:{$subtract:["$totalcredits","$totaldebit"]}
         }
         }
     ])   

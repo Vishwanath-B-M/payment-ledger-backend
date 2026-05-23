@@ -2,6 +2,7 @@ const transcationmodel=require('../models/transcation.model')
 const ledgermodel=require('../models/ledger.model')
 const accountmodel=require("../models/account.model")
 const transactionmodel = require('../models/transcation.model')
+const { default: mongoose } = require('mongoose')
 async function transcation(req,res) {
     const {fromaccount,toaccount,amount,idempotencykey}=req.body
     if(!fromaccount||!toaccount||!amount||!idempotencykey){
@@ -56,4 +57,38 @@ async function transcation(req,res) {
             message:`insufficient balance ,and balance is ${balance}}`
         })
     }
+    const session= await mongoose.startSession()
+    session.startTransaction()
+    const transcation=await transactionmodel.create({
+        fromaccount,
+        toaccount,
+        amount,
+        idempotencykey,
+        status:'pending'
+
+    },{session})
+    const debitledgerentry=await ledgermodel.create({
+        account:fromaccount,
+        amount:amount,
+        transcation:transcation._id,
+        type:"debit"
+
+    },{session})
+    const creditledgerentry=await ledgermodel.create({
+        account:toaccount,
+        amount:amount,
+        transcation:transcation._id,
+        type:"credit"
+    },{session})
+    transcation.status="complited"
+    await transcation.save({session})
+    await session.commitTransaction()
+    session.endSession()
+    if(transcation.status==="complited"){
+       return  res.status(200).json({
+        message:"transcation complited"
+    })
+     }
+
 }
+module.exports={transcation}
