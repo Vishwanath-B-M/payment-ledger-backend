@@ -23,18 +23,21 @@ async function getAllaccounts(req,res) {
     
 }
 async function getBalance(req,res) {
-    const {accountid}=req.body
+    const { accountid }=req.params
     const useraccountisthere=await accountmodel.findOne({
-        _id:accountid,user:req.user._id})
+        _id:accountid})
+        console.log(accountid)
+        console.log(req.user._id)
+        console.log(useraccountisthere)
         if(!useraccountisthere){
             return res.status(400).json({
                 message:"you can't bro"
             })
         }
-        const balance=await accountmodel.balance()
+        const balance=await useraccountisthere.balance()
         res.status(200).json({
             message:"balance is here",
-            accountid:account._id,
+            accountid:accountid,
             balance:balance
         })
     

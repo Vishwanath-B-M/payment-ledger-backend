@@ -1,5 +1,6 @@
 const usermodel=require("../models/user.model")
 const jwt=require("jsonwebtoken")
+const blacklistmodel=require("../models/blacklist.model")
 
 async function register(req,res) {
     const {email,name,password}=req.body
@@ -50,4 +51,21 @@ async function login(req,res) {
         }
     })  
 }
-module.exports={register,login}
+async function logout(req,res) {
+    const token=req.cookies.token
+    if(!token){
+        return res.status(400).json({
+            message:"there is no login"
+        })
+   }
+   res.cookie("token","")
+   res.clearCookie("token")
+   await blacklistmodel.create({
+    token:token
+   })
+    res.status(200).json({
+        message:"user logged out succefully"
+    })
+    
+}
+module.exports={register,login,logout}

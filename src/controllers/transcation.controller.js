@@ -47,7 +47,7 @@ async function transcation(req,res) {
             })
         }
     }
-    if(findfromaccount.status!=="active"||findtoaccount!=="active"){
+    if(findfromaccount.status!=="active"||findtoaccount.status!=="active"){
         return res.status(400).json({
             message:"both account must be active to proccess the transcation"
         })

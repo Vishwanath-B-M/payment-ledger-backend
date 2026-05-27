@@ -1,6 +1,7 @@
 const jwt=require("jsonwebtoken")
 const usermodel = require("../models/user.model")
 const accountmodel = require("../models/account.model")
+const blacklistmodel=require("../models/blacklist.model")
 
 
 async function userCheck(req,res,next) {
@@ -10,6 +11,12 @@ async function userCheck(req,res,next) {
             message:"unathorized access"
         })
     }
+    const  blacklist=await blacklistmodel.findOne({token})
+   if(blacklist){
+    return res.status(400).json({
+        message:"unathorized access"
+    })
+}
     try{
         const decoded=jwt.verify(token,process.env.jwturl)
         console.log(decoded)
@@ -36,6 +43,12 @@ async function systemUsercheck(req,res,next) {
             message:"you are forbidden"
         })
     }
+    const  blacklist=await blacklistmodel.findOne({token})
+   if(blacklist){
+    return res.status(400).json({
+        message:"unathorized access"
+    })
+}
    try{ 
     const decoded=jwt.verify(token,process.env.jwturl)
     const user=await usermodel.findById(decoded.userid).select("+systemUser")
