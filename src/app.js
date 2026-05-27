@@ -9,7 +9,12 @@ app.use(express.json())
 app.use(cookieparser())
 app.use("/api/auth/",authRouter)
 app.use("/api/account/",accountRouter)
-app.use("/api/transaction/",transactionRouter)
+app.use("/api/transaction/",transactionRouter)\
+app.get("/",(req,res)=>{
+    res.status(200).json({
+        message:"ledger created and running succefully"
+    })
+})
 
 
 module.exports=app;
